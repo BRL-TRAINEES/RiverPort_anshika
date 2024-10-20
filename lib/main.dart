@@ -14,6 +14,9 @@ final nameProvider = Provider<String>((ref) {
 //to access
 //m1. by using consumerwidget in place of stateless widgets then build will take one another parameter ref(helps to access variables in other widgets)of type widgetref then can accss using ref.watch()
 //m2. using consumer widgets for a specific widget that take builder method and builder take three parameters -context,child,ref and then we can excess by ref.watch()....
+
+//ref - parameter of widgetref and widgetref allows widgets to intract with providers.
+
 void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -54,16 +57,22 @@ class MyApp extends StatelessWidget {
 // }
 
 // access in stateful widgets
-class Main extends StatefulWidget {
-  const Main({super.key});
+class Main extends ConsumerStatefulWidget {
+  const Main({Key? key}) : super(key: key);
 
   @override
-  State<Main> createState() => _MainState();
+  _MainState createState() => _MainState();
 }
 
-class _MainState extends State<Main> {
+class _MainState extends ConsumerState<Main> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    final name = ref.watch(
+        nameProvider); // here we can access ref directly as it as already defined as a function in ConsumerState
+    return Scaffold(
+      body: Center(
+        child: Text(name),
+      ),
+    );
   }
 }
